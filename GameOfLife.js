@@ -43,8 +43,8 @@ class GameOfLife {
 
   //toggleCell
   toggleCell(row, col) {
-    const state = this.board[row][col]
-    this.board[row][col] = state ? 0 : 1
+    const state = this.getCell(row, col)
+    return state ? 0 : 1
   }
 
   /**
@@ -88,11 +88,15 @@ class GameOfLife {
       const row = this.board[i]
       for (let j = 0; j < row.length; j++) {
         const neighbors = this.livingNeighbors(i, j)
-        if ( neighbors < 2 || neighbors > 3) {
-          newBoard[i][j] = 0
+        const state = this.getCell(i, j)
+        if ( !state && neighbors === 3) {
+          newBoard[i][j] = this.toggleCell(i, j)
+        }
+        else if (state && (neighbors > 3 || neighbors < 2)) {
+          newBoard[i][j] = this.toggleCell(i, j)
         }
         else {
-          newBoard[i][j] = 1
+          newBoard[i][j] = state
         }
       }
     }
