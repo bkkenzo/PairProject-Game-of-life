@@ -1,5 +1,5 @@
 class GameOfLife {
-  constructor(width, height) {
+  constructor(height, width) {
     this.width = width;
     this.height = height;
     this.board = this.makeBoard();
@@ -10,7 +10,7 @@ class GameOfLife {
    */
 
   makeBoard() {
-    // TODO: Create and return an 2D Array 
+    // TODO: Create and return an 2D Array
     // with `this.heigh` as rows and `this.width` as cols.
     // For example, given a height of 4 and a width of 3, it will generate:
     // [
@@ -19,8 +19,33 @@ class GameOfLife {
     //  [0, 0, 0],
     //  [0, 0, 0],
     // ]
+    const myBoard = new Array(this.height).fill(0)
+    return myBoard.map( row => {
+      const cell = new Array(this.width).fill(0)
+      return cell
+    })
   }
 
+
+  //getCell
+  getCell(row, col) {
+    if (col < 0 || row < 0 || this.board.length <= row) return 0
+    if (this.board[row].length <= col) return 0
+    return this.board[row][col]
+  }
+
+  //setCell
+  setCell(val, row, col) {
+    if (col < 0 || row < 0 || this.board.length <= row) return
+    if (this.board[row].length <= col) return
+    this.board[row][col] = val
+  }
+
+  //toggleCell
+  toggleCell(row, col) {
+    const state = this.board[row][col]
+    this.board[row][col] = state ? 0 : 1
+  }
 
   /**
    * Return the amount of living neighbors around a given coordinate.
@@ -28,24 +53,49 @@ class GameOfLife {
 
   livingNeighbors(row, col) {
     // TODO: Return the count of living neighbors.
+    const r = row
+    const c = col
+    let neighbors = 0
+    neighbors += this.getCell(r-1, c)
+    neighbors += this.getCell(r+1, c)
+    neighbors += this.getCell(r, c-1)
+    neighbors += this.getCell(r, c+1)
+    neighbors += this.getCell(r-1, c-1)
+    neighbors += this.getCell(r-1, c+1)
+    neighbors += this.getCell(r+1, c-1)
+    neighbors += this.getCell(r+1, c+1)
+    return neighbors
   }
 
 
   /**
    * Given the present board, apply the rules to generate a new board
    */
-  
+
   tick() {
     const newBoard = this.makeBoard();
     // TODO: Here is where you want to loop through all the cells
     // on the existing board and determine, based on it's neighbors,
-    // whether the cell should be dead or alive in the new board 
-    // (the next iteration of the game) 
+    // whether the cell should be dead or alive in the new board
+    // (the next iteration of the game)
     //
     // You need to:
     // 1. Count alive neighbors for all cells
     // 2. Set the next state of all cells in newBoard,
     // based on their current alive neighbors
+
+    for (let i = 0; i < this.board.length; i++) {
+      const row = this.board[i]
+      for (let j = 0; j < row.length; j++) {
+        const neighbors = this.livingNeighbors(i, j)
+        if ( neighbors < 2 || neighbors > 3) {
+          newBoard[i][j] = 0
+        }
+        else {
+          newBoard[i][j] = 1
+        }
+      }
+    }
     this.board = newBoard;
   }
 }
