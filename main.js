@@ -73,12 +73,17 @@ document.getElementById("board").addEventListener("click", event => {
   // TODO: Toggle clicked cell (event.target) and paint
   const targ = event.target
   if (targ.tagName !== 'TD') return
-  gol.toggleCell(targ.dataset.row, targ.dataset.col)
+  const row  = Number(targ.dataset.row)
+  const col = Number(targ.dataset.col)
+  const val = gol.board[row][col]
+  gol.board[row][col] = val ? 0 : 1
   targ.classList.toggle('alive')
 });
 
 document.getElementById("step_btn").addEventListener("click", event => {
   // TODO: Do one gol tick and paint
+  gol.tick()
+  paint()
 });
 
 document.getElementById("play_btn").addEventListener("click", event => {
@@ -86,6 +91,10 @@ document.getElementById("play_btn").addEventListener("click", event => {
   // repeatedly every fixed time interval.
   // HINT:
   // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
+  setInterval(() => {
+    gol.tick()
+    paint()
+  }, 1000)
 });
 
 document.getElementById("random_btn").addEventListener("click", event => {
@@ -94,4 +103,10 @@ document.getElementById("random_btn").addEventListener("click", event => {
 
 document.getElementById("clear_btn").addEventListener("click", event => {
   // TODO: Clear the board and paint
+  gol.board.forEach( (row, rowIdx) => {
+    row.forEach( (col, colIdx) => {
+      gol.board[rowIdx][colIdx] = 0
+    })
+  })
+  paint()
 });
