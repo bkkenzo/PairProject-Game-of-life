@@ -1,9 +1,27 @@
-const width = 25;
-const height = 20; // width and height dimensions of the board
+let width = 25;
+let height = 20; // width and height dimensions of the board
+let speed = 100;
 let intervalId = null
+
+// Actual table cells
+const tds = [];
 /**
  * Create a Game of Life instance
  */
+document.getElementById("enter").addEventListener('click', () => {
+  const h = Number(document.getElementById('height').value)
+  const w = Number(document.getElementById('width').value)
+  const s = Number(document.getElementById('speed').value)
+
+  width = w ? w : width
+  height = h ? h : height
+  speed = s > 100 ? s : speed
+
+  document.getElementById('play_btn').innerText = 'Play'
+  clearInterval(intervalId)
+
+  createTable()
+})
 
 const gol = new GameOfLife(height, width);
 
@@ -12,28 +30,31 @@ const gol = new GameOfLife(height, width);
  * create a table and append to the DOM
  */
 
-// Actual table cells
-const tds = [];
-
-// <table> element
-const table = document.createElement("tbody");
-// build a table row <tr>
-for (let h = 0; h < height; h++) {
-  const tr = document.createElement("tr");
-  // build a table column <td>
-  for (let w = 0; w < width; w++) {
-    const td = document.createElement("td");
-    // We'll put the coordinates on the cell
-    // Element itself (using dataset),
-    // letting us fetch it in a click listener later.
-    td.dataset.row = h;
-    td.dataset.col = w;
-    tds.push(td);
-    tr.append(td);
+ function createTable() {
+    // <table> element
+  const table = document.createElement("tbody");
+  // build a table row <tr>
+  for (let h = 0; h < height; h++) {
+    const tr = document.createElement("tr");
+    // build a table column <td>
+    for (let w = 0; w < width; w++) {
+      const td = document.createElement("td");
+      // We'll put the coordinates on the cell
+      // Element itself (using dataset),
+      // letting us fetch it in a click listener later.
+      td.dataset.row = h;
+      td.dataset.col = w;
+      tds.push(td);
+      tr.append(td);
+    }
+    table.append(tr);
   }
-  table.append(tr);
-}
-document.getElementById("board").append(table);
+  const myTable = document.getElementById("board")
+  myTable.innerHTML = ''
+  myTable.append(table);
+ }
+
+ createTable()
 
 
 /**
@@ -91,14 +112,20 @@ document.getElementById("play_btn").addEventListener("click", event => {
   // repeatedly every fixed time interval.
   // HINT:
   // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
-  if (event.target.innerText === 'Play') event.target.innerText = 'Pause'
-  intervalId = setInterval(() => {
+  if (event.target.innerText === 'Play') {
+    event.target.innerText = 'Pause'
+    intervalId = setInterval(() => {
     gol.tick()
     paint()
-  }, 20)
+  }, speed)
+  }
+  else {
+    clearInterval(intervalId)
+    event.target.innerText = 'Play'
+  }
 });
 
-document.getElementById("random_btn").addEventListener("click", event => {
+document.getElementById("random_btn").addEventListener("click", () => {
   // TODO: Randomize the board and paint
   gol.board.forEach( (row, rowIdx) => {
     row.forEach( (col, colIdx) => {
@@ -120,3 +147,4 @@ document.getElementById("clear_btn").addEventListener("click", event => {
   })
   paint()
 });
+

@@ -38,7 +38,7 @@ td.alive {
   font-size: 0.9em;
   text-align: center;
   background-color: #2ba6cb;
-  color: #fefefe; 
+  color: #fefefe;
 }
 
 .button:hover, .button:focus {
@@ -47,4 +47,12 @@ td.alive {
 
 .button:focus {
   outline: dashed 1px #2ba6cb;
+}
+
+#settings {
+  margin-bottom: 20px;
+}
+
+input {
+  width: 50px;
 }
