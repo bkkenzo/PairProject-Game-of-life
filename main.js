@@ -1,11 +1,11 @@
 const width = 25;
 const height = 20; // width and height dimensions of the board
-
+let intervalId = null
 /**
  * Create a Game of Life instance
  */
 
-const gol = new GameOfLife(width, height);
+const gol = new GameOfLife(height, width);
 
 
 /**
@@ -91,18 +91,28 @@ document.getElementById("play_btn").addEventListener("click", event => {
   // repeatedly every fixed time interval.
   // HINT:
   // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
-  setInterval(() => {
+  if (event.target.innerText === 'Play') event.target.innerText = 'Pause'
+  intervalId = setInterval(() => {
     gol.tick()
     paint()
-  }, 1000)
+  }, 20)
 });
 
 document.getElementById("random_btn").addEventListener("click", event => {
   // TODO: Randomize the board and paint
+  gol.board.forEach( (row, rowIdx) => {
+    row.forEach( (col, colIdx) => {
+      gol.board[rowIdx][colIdx] = Math.random() > 0.5 ? 1 : 0
+    })
+  })
+  paint()
 });
 
 document.getElementById("clear_btn").addEventListener("click", event => {
   // TODO: Clear the board and paint
+  // event.target.previousSibling.previousSibling.innerText = 'Play'
+  event.target.previousElementSibling.previousElementSibling.innerText = 'Play'
+  clearInterval(intervalId)
   gol.board.forEach( (row, rowIdx) => {
     row.forEach( (col, colIdx) => {
       gol.board[rowIdx][colIdx] = 0
