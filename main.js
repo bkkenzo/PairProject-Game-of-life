@@ -3,12 +3,15 @@ let height = 20; // width and height dimensions of the board
 let speed = 100;
 let intervalId = null
 
+const gol = new GameOfLife(height, width);
+
 // Actual table cells
 const tds = [];
 /**
  * Create a Game of Life instance
  */
 document.getElementById("enter").addEventListener('click', () => {
+
   const h = Number(document.getElementById('height').value)
   const w = Number(document.getElementById('width').value)
   const s = Number(document.getElementById('speed').value)
@@ -17,13 +20,14 @@ document.getElementById("enter").addEventListener('click', () => {
   height = h ? h : height
   speed = s > 100 ? s : speed
 
+  gol.width = width
+  gol.height = height
+  gol.board = gol.makeBoard()
+
   document.getElementById('play_btn').innerText = 'Play'
   clearInterval(intervalId)
-
   createTable()
 })
-
-const gol = new GameOfLife(height, width);
 
 
 /**
@@ -32,6 +36,7 @@ const gol = new GameOfLife(height, width);
 
  function createTable() {
     // <table> element
+  tds.length = 0
   const table = document.createElement("tbody");
   // build a table row <tr>
   for (let h = 0; h < height; h++) {
@@ -127,6 +132,7 @@ document.getElementById("play_btn").addEventListener("click", event => {
 
 document.getElementById("random_btn").addEventListener("click", () => {
   // TODO: Randomize the board and paint
+  console.log(gol.board)
   gol.board.forEach( (row, rowIdx) => {
     row.forEach( (col, colIdx) => {
       gol.board[rowIdx][colIdx] = Math.random() > 0.5 ? 1 : 0

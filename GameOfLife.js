@@ -19,8 +19,9 @@ class GameOfLife {
     //  [0, 0, 0],
     //  [0, 0, 0],
     // ]
+    console.log(this.height, this.width)
     const myBoard = new Array(this.height).fill(0)
-    return myBoard.map( row => {
+    return myBoard.map( () => {
       const cell = new Array(this.width).fill(0)
       return cell
     })
