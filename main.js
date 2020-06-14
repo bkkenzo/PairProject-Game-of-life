@@ -73,7 +73,7 @@ document.getElementById("board").addEventListener("click", event => {
   // TODO: Toggle clicked cell (event.target) and paint
   const targ = event.target
   if (targ.tagName !== 'TD') return
-  gol.toggle(targ.dataset.row, targ.dataset.col)
+  gol.toggleCell(targ.dataset.row, targ.dataset.col)
   targ.classList.toggle('alive')
 });
 
