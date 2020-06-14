@@ -49,6 +49,15 @@ const paint = () => {
   //
   // To find all the <td>s in the table, you might query the DOM for them, or you
   // could choose to collect them when we create them in createTable.
+
+  tds.forEach( td => {
+    if (gol.getCell(td.dataset.row, td.dataset.col)) {
+      td.classList.add('alive')
+    }
+    else {
+      td.classList.remove('alive')
+    }
+  })
   //
   // HINT:
   //   https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
@@ -62,6 +71,10 @@ const paint = () => {
 
 document.getElementById("board").addEventListener("click", event => {
   // TODO: Toggle clicked cell (event.target) and paint
+  const targ = event.target
+  if (targ.tagName !== 'TD') return
+  gol.toggle(targ.dataset.row, targ.dataset.col)
+  targ.classList.toggle('alive')
 });
 
 document.getElementById("step_btn").addEventListener("click", event => {
